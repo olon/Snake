@@ -7,5 +7,66 @@
     <ResultTable userName="Vova">
       <scores>10</scores>
     </ResultTable>
+    <ResultTable userName="Vova Groy">
+      <scores>10</scores>
+    </ResultTable>
+    <ResultTable userName="Vova Groy">
+      <scores>10</scores>
+    </ResultTable>
+    <ResultTable userName="Vova">
+      <scores>150</scores>
+    </ResultTable>
+    <ResultTable userName="Vova Groy">
+      <scores>10</scores>
+    </ResultTable>
+    <ResultTable userName="Vova Groy">
+      <scores>10</scores>
+    </ResultTable>
+    <ResultTable userName="Vova Groy">
+      <scores>10</scores>
+    </ResultTable>
+    <ResultTable userName="Player">
+      <scores>0</scores>
+    </ResultTable>
+    <ResultTable userName="Player">
+      <scores>0</scores>
+    </ResultTable>
+    <ResultTable userName="Vova Groy">
+      <scores>10</scores>
+    </ResultTable>
+    <ResultTable userName="Vova Groy">
+      <scores>10</scores>
+    </ResultTable>
+    <ResultTable userName="Vova Groy">
+      <scores>10</scores>
+    </ResultTable>
+    <ResultTable userName="Vova Groy">
+      <scores>10</scores>
+    </ResultTable>
+    <ResultTable userName="Vova Groy">
+      <scores>10</scores>
+    </ResultTable>
+    <ResultTable userName="Vova Groy">
+      <scores>10</scores>
+    </ResultTable>
+    <ResultTable userName="Vova Groy">
+      <scores>10</scores>
+    </ResultTable>
+    <ResultTable userName="Vova Groy">
+      <scores>10</scores>
+    </ResultTable>
+    <ResultTable userName="Vova Groy">
+      <scores>10</scores>
+    </ResultTable>
+    <ResultTable userName="Vova Groy">
+      <scores>10</scores>
+    </ResultTable>
+    <ResultTable userName="Vova Groy">
+      <scores>10</scores>
+    </ResultTable>
+    <ResultTable userName="Vova Groy">
+      <scores>10</scores>
+    </ResultTable>
   </ResultTableContainer>
+  <GetChangeCounter>0</GetChangeCounter>
 </ResultTableCollection>

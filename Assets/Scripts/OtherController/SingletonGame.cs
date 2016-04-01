@@ -9,6 +9,7 @@ public class SingletonGame {
     public int lifeSnake = 3;
     public int points = 0;
     public float distanceSnake = 0;
+    public string name = "Player";
 
     private SingletonGame() { }
 

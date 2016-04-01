@@ -121,7 +121,7 @@ public class Snake : MonoBehaviour, ISnakeController
             if (SingletonGame.Instance.lifeSnake == 0)
             {
                 GameController.GoToMenu();
-                new ResultTableContainer().SaveParamsInResultTable("Vova", Game.Instance.points);
+                new ResultTableContainer().SaveParamsInResultTable(SingletonGame.Instance.name, Game.Instance.points);
             }
                 
             else

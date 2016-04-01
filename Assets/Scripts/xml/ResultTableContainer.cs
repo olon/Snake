@@ -10,6 +10,14 @@ public class ResultTableContainer{
     [XmlArrayItem("ResultTable")]
     public List<ResultTable> ResultTableList = new List<ResultTable>();
 
+    private int changeCounter = 0;
+
+    public int GetChangeCounter
+    {
+        get{ return changeCounter; }
+        set{ changeCounter = value; }      
+    }
+
     public void SaveParamsInResultTable(string userName, int scores)
     {
         var serializer = new XmlSerializer(typeof(ResultTableContainer));
@@ -27,6 +35,7 @@ public class ResultTableContainer{
         using (var stream = new FileStream("ResultTable.xml", FileMode.Create))
         {
             serializer.Serialize(stream, this);
+            changeCounter++;
         }
     }
 

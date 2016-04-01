@@ -19,7 +19,7 @@ public class Food : MonoBehaviour
     {
         GameObject food = (GameObject)Instantiate(Resources.Load("Prefabs/" + foodItem, typeof(GameObject)));
 
-        Vector3 randomV = new Vector3(Random.Range(-16, 16) * 5 + 2.5f, -1, Random.Range(-11, 11) * 5 + 2.5f);
+        Vector3 randomV = new Vector3(Random.Range(-16, 16) * 5 + 2.5f, -2, Random.Range(-11, 11) * 5 + 2.5f);
 
         Collider[] mas = Physics.OverlapSphere(randomV, 4);
         if (mas.Length != 0)

@@ -133,7 +133,10 @@ public class SnakeThirdPersonControll : MonoBehaviour, ISnakeController {
             SingletonGame.Instance.points = GameThirdPerson.Instance.points;
 
             if (SingletonGame.Instance.lifeSnake == 0)
+            {
                 GameController.GoToMenu();
+                new ResultTableContainer().SaveParamsInResultTable(SingletonGame.Instance.name, Game.Instance.points);
+            }
             else
                 GameController.LoadLevelSnakeThirdPerson();
         }
