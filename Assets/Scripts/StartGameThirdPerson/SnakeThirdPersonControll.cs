@@ -20,6 +20,8 @@ public class SnakeThirdPersonControll : MonoBehaviour, ISnakeController {
     public GameObject TailSnake;
     public GameObject Current;
 
+    Animation anim;
+
     private int horizontalAxis = 0;
     private int verticalAxis = 0;
 
@@ -32,14 +34,12 @@ public class SnakeThirdPersonControll : MonoBehaviour, ISnakeController {
     public void Start()
     {
         _controller = GetComponent<CharacterController>();
+
+        anim = GetComponent<Animation>();
     }
 
     public void Update()
     {
-        //hint
-        if (transform.position.z - lastPosZ > 1.0f)
-            transform.position = new Vector3(transform.position.x, transform.position.y, lastPosZ + 0.2f);
-
         currentRotation = Mathf.RoundToInt(transform.localEulerAngles.y);
 
         //Checking position joystick and in what direction will turn
@@ -52,34 +52,30 @@ public class SnakeThirdPersonControll : MonoBehaviour, ISnakeController {
         MoveAndRotate();
 
         lastPosZ = transform.position.z;
+
+        if(GameThirdPerson.gameStop)
+            anim.Stop();
+        
+        if(!GameThirdPerson.gameStop && !anim.Play())
+            anim.Play();
     }
 
     public void CheckButtonClick()
     {
-        if (joystick.GetHorizontalInput() == 1 && checkInputButton == -1 && (currentRotation == 0 || currentRotation == 180))
+        if (joystick.GetHorizontalInput() == 1 && checkInputButton == -1 && (currentRotation == 0 || currentRotation == 90 ||
+                                                                           currentRotation == 270 || currentRotation == 180))
         {
-            horizontalAxis = (int)Mathf.Sign(joystick.AxisHorizontal()) * GameThirdPerson.Instance._currentController;
-            if (horizontalAxis == 1 || horizontalAxis == -1)
+            horizontalAxis = (int)Mathf.Sign(joystick.AxisHorizontal());
+            if (horizontalAxis == -1 || horizontalAxis == 1)
                 joystickInput = 0;
         }
-        if (joystick.GetVerticalInput() == -1 && checkInputButton == -1 && (currentRotation == 90 || currentRotation == 270))
-        {
-            verticalAxis = (int)Mathf.Sign(joystick.AxisVertical()) * -1 * GameThirdPerson.Instance._currentController;
-            if (verticalAxis == 1 || verticalAxis == -1)
-                joystickInput = 1;
-        }
 
-        if (Input.GetButtonUp("Horizontal") && joystickInput == -1 && (currentRotation == 0 || currentRotation == 180))
+        if (Input.GetButtonUp("Horizontal") && joystickInput == -1 && (currentRotation == 0 || currentRotation == 90 ||
+                                                                     currentRotation == 270 || currentRotation == 180))
         {
-            horizontalAxis = (int)Mathf.Sign(Input.GetAxis("Horizontal")) * GameThirdPerson.Instance._currentController;
-            if (horizontalAxis == 1 || horizontalAxis == -1)
+            horizontalAxis = (int)Mathf.Sign(Input.GetAxis("Horizontal"));
+            if (horizontalAxis == -1 || horizontalAxis == 1)
                 checkInputButton = 0;
-        }
-        if (Input.GetButtonUp("Vertical") && joystickInput == -1 && (currentRotation == 90 || currentRotation == 270))
-        {
-            verticalAxis = (int)Mathf.Sign(Input.GetAxis("Vertical")) * -1 * GameThirdPerson.Instance._currentController;
-            if (verticalAxis == 1 || verticalAxis == -1)
-                checkInputButton = 1;
         }
     }
 
@@ -100,29 +96,27 @@ public class SnakeThirdPersonControll : MonoBehaviour, ISnakeController {
     {
         if ((checkInputButton == 0 || joystickInput == 0) && ((currentRotation == 0 && startPositionZ - 0.5f < transform.position.z) ||
                              (currentRotation == 180 && startPositionZ + 0.5f > transform.position.z)))
-        {
+            {
             transform.position = new Vector3(startPositionX, -1, startPositionZ);
             SnakeRotation(0, 180, horizontalAxis);
             checkInputButton = -1;
         }
-        else if ((checkInputButton == 1 || joystickInput == 1) && ((currentRotation == 90 && startPositionX - 0.5f < transform.position.x) ||
+        else if ((checkInputButton == 0 || joystickInput == 0) && ((currentRotation == 90 && startPositionX - 0.5f < transform.position.x) ||
                                          (currentRotation == 270 && startPositionX + 0.5f > transform.position.x)))
         {
             transform.position = new Vector3(startPositionX, -1, startPositionZ);
-            SnakeRotation(90, 270, verticalAxis);
+            SnakeRotation(90, 270, horizontalAxis);
             checkInputButton = -1;
         }
-        else
+        else if(!GameThirdPerson.gameStop)
             _controller.Move(transform.forward * GameThirdPerson.Instance._currentSpeed * Time.deltaTime);
     }
 
     //Method helps to turn the snake
     public void SnakeRotation(int firstRotation, int secondRotation, int rightTurn)
     {
-        if (currentRotation == firstRotation)
+        if (currentRotation == firstRotation || currentRotation == secondRotation)
             transform.Rotate(0, 90.0f * rightTurn, 0);
-        if (currentRotation == secondRotation)
-            transform.Rotate(0, -90.0f * rightTurn, 0);
     }
 
     public void OnControllerColliderHit(ControllerColliderHit other)

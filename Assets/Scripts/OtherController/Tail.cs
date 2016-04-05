@@ -22,4 +22,5 @@ public class Tail : MonoBehaviour {
             transform.LookAt(target);
         }
     }
+
 }

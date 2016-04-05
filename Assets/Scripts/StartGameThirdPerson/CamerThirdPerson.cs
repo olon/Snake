@@ -2,33 +2,39 @@
 
 public class CamerThirdPerson : MonoBehaviour {
 
-    public Transform target;
-    private Vector3 targetDistance;
+    public GameObject target;
+    public float smooth;
+    public float yoffset;
 
-    void Start()
-    {
-        targetDistance = transform.position - target.position;
-        GameThirdPerson.Instance._currentController = 1;
-    }
-
-    //Changes the position and rotation of the camera and joystick controller
     void LateUpdate()
     {
-        if(target.position.z < -20 && (int)transform.eulerAngles.y == 0)
+
+        SmoothFallow(target, yoffset);
+
+        SmoothLookAt(target.transform.position, smooth);
+    }
+
+    void SmoothFallow(GameObject target, float yOffset)
+    {
+        Vector3 targetPosition = (new Vector3(target.transform.position.x, target.transform.position.y + yOffset, target.transform.position.z)) + (target.transform.forward * (-1f));
+
+        float distance = Vector3.Distance(transform.position, targetPosition);
+
+        if (distance > 0f)
         {
-            transform.eulerAngles = new Vector3((int)transform.eulerAngles.x, 180.0f, 0);
-            transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - targetDistance.z * 2);
-            targetDistance = transform.position - target.position;
-            GameThirdPerson.Instance._currentController = -1;
+            float fallowSpeed;
+
+            if (distance >= 1f) fallowSpeed = Mathf.Pow(distance, 2);
+            else if (distance >= 0.5f) fallowSpeed = distance * 1.3f;
+            else fallowSpeed = 0.7f;
+            transform.position = Vector3.MoveTowards(transform.position, targetPosition, Time.deltaTime * fallowSpeed);
         }
-        else if(target.position.z > 20 && (int)transform.eulerAngles.y == 180)
-        {
-            transform.eulerAngles = new Vector3((int)transform.eulerAngles.x, 0, 0);
-            transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - targetDistance.z * 2);
-            targetDistance = transform.position - target.position;
-            GameThirdPerson.Instance._currentController = 1;
-        }
-        else 
-            transform.position = target.position + targetDistance;
+    }
+
+    void SmoothLookAt(Vector3 target, float smooth)
+    {
+        Vector3 dir = target - transform.position;
+        dir = new Vector3(dir.x, 0, dir.z);
+        transform.forward = Vector3.Slerp(transform.forward, dir, Time.deltaTime * smooth);
     }
 }

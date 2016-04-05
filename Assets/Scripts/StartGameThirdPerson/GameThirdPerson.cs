@@ -12,11 +12,12 @@ public class GameThirdPerson : MonoBehaviour, IGame {
     private int _lastLengthSnake = -1;
 
     public float _currentSpeed = 16;
-    public int _currentController = 1;
 
     public Text TextLengthSnake;
     public Text TextScore;
     public Text TextLife;
+
+    public static bool gameStop = false;
 
     public void Awake()
     {
@@ -70,9 +71,19 @@ public class GameThirdPerson : MonoBehaviour, IGame {
         _currentSpeed = _currentSpeed + 1;
     }
 
-    public void ExitGame()
+    public void PauseGame()
     {
-        GameController.ExitGame();
+        gameStop = true;
+    }
+
+    public void ResumeGame()
+    {
+        gameStop = false;
+    }    
+
+    public void GoToMenu()
+    {
+        GameController.GoToMenu();
     }
 
 }

@@ -53,13 +53,6 @@ public class VirtualJoystick : MonoBehaviour, IDragHandler, IPointerUpHandler, I
         else return 0;
     }
 
-    public int GetVerticalInput()
-    {
-        if (Mathf.Abs(Mathf.RoundToInt(inputVector.z)) == 1 && Mathf.RoundToInt(inputVector.x) == 0)
-            return -1;
-        else return 0;
-    }
-
     public float AxisHorizontal()
     {
         if (inputVector.x != 0)
@@ -67,12 +60,5 @@ public class VirtualJoystick : MonoBehaviour, IDragHandler, IPointerUpHandler, I
         else
             return Input.GetAxis("Horizontal");
 
-    }
-    public float AxisVertical()
-    {
-        if (inputVector.z != 0)
-            return inputVector.z;
-        else
-            return Input.GetAxis("Vertical");
     }
 }

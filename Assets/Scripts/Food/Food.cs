@@ -29,17 +29,14 @@ public class Food : MonoBehaviour
                 if (item.GetComponent<Snake>() || item.GetComponent<Tail>() || item.GetComponent<SnakeThirdPersonControll>())
                 {
                     StartCoroutine(CoGenerateNewFood(foodItem));
-                    yield return null;
+                    yield break;
                 }
             }
-            food.transform.position = randomV;
         }
-        else
-        {
-            food.transform.position = randomV;
 
-            yield return null;
-        }
+        food.transform.position = randomV;
+
+        yield break;
     }
 
 }
