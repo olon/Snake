@@ -56,9 +56,13 @@ public class VirtualJoystick : MonoBehaviour, IDragHandler, IPointerUpHandler, I
     public float AxisHorizontal()
     {
         if (inputVector.x != 0)
+        {
             return inputVector.x;
+        }
         else
+        {
             return Input.GetAxis("Horizontal");
+        }
 
     }
 }

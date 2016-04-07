@@ -6,7 +6,7 @@ using System;
 public class SnakeThirdPersonControll : MonoBehaviour, ISnakeController {
 
     private int currentRotation = 0;
-    private int checkInputButton = -1;
+    private int ButtonInput = -1;
     private int joystickInput = -1;
 
     private CharacterController _controller;
@@ -62,51 +62,56 @@ public class SnakeThirdPersonControll : MonoBehaviour, ISnakeController {
 
     public void CheckButtonClick()
     {
-        if (joystick.GetHorizontalInput() == 1 && checkInputButton == -1 && (currentRotation == 0 || currentRotation == 90 ||
-                                                                           currentRotation == 270 || currentRotation == 180))
+        //wait until the joystick released
+        if (joystick.GetHorizontalInput() == 0 && joystickInput == -1) joystickInput = 0;
+
+        if (joystick.GetHorizontalInput() == 1 && ButtonInput == -1 && joystickInput == 0 && (currentRotation == 0 || currentRotation == 90 
+            || currentRotation == 270 || currentRotation == 180))
         {
             horizontalAxis = (int)Mathf.Sign(joystick.AxisHorizontal());
             if (horizontalAxis == -1 || horizontalAxis == 1)
-                joystickInput = 0;
+                joystickInput = 1;
         }
 
-        if (Input.GetButtonUp("Horizontal") && joystickInput == -1 && (currentRotation == 0 || currentRotation == 90 ||
-                                                                     currentRotation == 270 || currentRotation == 180))
+        if (Input.GetButtonUp("Horizontal") && joystickInput == 0 && (currentRotation == 0 || currentRotation == 90 
+            || currentRotation == 270 || currentRotation == 180))
         {
             horizontalAxis = (int)Mathf.Sign(Input.GetAxis("Horizontal"));
             if (horizontalAxis == -1 || horizontalAxis == 1)
-                checkInputButton = 0;
+                ButtonInput = 1;
         }
     }
 
     public void TrackNextCell()
     {
-        if (startPositionZ < transform.position.z && currentRotation == 0)
+        if (startPositionZ <= transform.position.z && currentRotation == 0)
             startPositionZ += 5.0f;
-        else if (startPositionZ > transform.position.z && currentRotation == 180)
+        else if (startPositionZ >= transform.position.z && currentRotation == 180)
             startPositionZ -= 5.0f;
 
-        if (startPositionX < transform.position.x && currentRotation == 90)
+        if (startPositionX <= transform.position.x && currentRotation == 90)
             startPositionX += 5.0f;
-        else if (startPositionX > transform.position.x && currentRotation == 270)
+        else if (startPositionX >= transform.position.x && currentRotation == 270)
             startPositionX -= 5.0f;
     }
 
     public void MoveAndRotate()
     {
-        if ((checkInputButton == 0 || joystickInput == 0) && ((currentRotation == 0 && startPositionZ - 0.5f < transform.position.z) ||
+        if ((ButtonInput == 1 || joystickInput == 1) && ((currentRotation == 0 && startPositionZ - 0.5f < transform.position.z) ||
                              (currentRotation == 180 && startPositionZ + 0.5f > transform.position.z)))
-            {
+        {
             transform.position = new Vector3(startPositionX, -1, startPositionZ);
             SnakeRotation(0, 180, horizontalAxis);
-            checkInputButton = -1;
+            joystickInput = -1;
+            ButtonInput = -1;
         }
-        else if ((checkInputButton == 0 || joystickInput == 0) && ((currentRotation == 90 && startPositionX - 0.5f < transform.position.x) ||
+        else if ((ButtonInput == 1 || joystickInput == 1) && ((currentRotation == 90 && startPositionX - 0.5f < transform.position.x) ||
                                          (currentRotation == 270 && startPositionX + 0.5f > transform.position.x)))
         {
             transform.position = new Vector3(startPositionX, -1, startPositionZ);
             SnakeRotation(90, 270, horizontalAxis);
-            checkInputButton = -1;
+            joystickInput = -1;
+            ButtonInput = -1;
         }
         else if(!GameThirdPerson.gameStop)
             _controller.Move(transform.forward * GameThirdPerson.Instance._currentSpeed * Time.deltaTime);
