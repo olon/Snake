@@ -84,14 +84,14 @@ public class Snake : MonoBehaviour, ISnakeController
         if (checkInputButton == 0 && ((currentRotation == 0 && startPositionZ - 0.5f < transform.position.z) ||
                              (currentRotation == 180 && startPositionZ + 0.5f > transform.position.z)))
         {
-            transform.position = new Vector3(startPositionX, -1, startPositionZ);
+            transform.position = new Vector3(startPositionX, -0.5f, startPositionZ);
             SnakeRotation(0, 180, horizontalAxis);
             checkInputButton = -1;
         }
         else if (checkInputButton == 1 && ((currentRotation == 90 && startPositionX - 0.5f < transform.position.x) ||
                                          (currentRotation == 270 && startPositionX + 0.5f > transform.position.x)))
         {
-            transform.position = new Vector3(startPositionX, -1, startPositionZ);
+            transform.position = new Vector3(startPositionX, -0.5f, startPositionZ);
             SnakeRotation(90, 270, verticalAxis);
             checkInputButton = -1;
         }
@@ -118,12 +118,11 @@ public class Snake : MonoBehaviour, ISnakeController
         {
             SingletonGame.Instance.lifeSnake--;
             SingletonGame.Instance.points = Game.Instance.points;
-            if (SingletonGame.Instance.lifeSnake == 0)
+            if (SingletonGame.Instance.lifeSnake <= 0)
             {
+                new ResultTableContainer().SaveParamsInResultTable(SingletonGame.Instance.name, SingletonGame.Instance.points);
                 GameController.GoToMenu();
-                new ResultTableContainer().SaveParamsInResultTable(SingletonGame.Instance.name, Game.Instance.points);
             }
-                
             else
                 GameController.LoadLevelSnake();
         }
@@ -137,7 +136,7 @@ public class Snake : MonoBehaviour, ISnakeController
             Current.transform.position - Current.transform.forward * 0.8f,
             transform.rotation) as GameObject;
         BodySnake.GetComponent<Tail>().target = Current.transform;
-        TailSnake.GetComponent<Tail>().target = BodySnake.transform;
+        TailSnake.GetComponent<Tail>().target = BodySnake.transform.FindChild("LookAtTail");
         Current = BodySnake;
     }
 }

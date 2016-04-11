@@ -12,6 +12,7 @@ public class ResultTableContainer{
 
     private int changeCounter = 0;
 
+
     public int GetChangeCounter
     {
         get{ return changeCounter; }
@@ -22,7 +23,7 @@ public class ResultTableContainer{
     {
         var serializer = new XmlSerializer(typeof(ResultTableContainer));
 
-        if(File.Exists("ResultTable.xml"))
+        if(File.Exists(SingletonGame.Instance.path))
             ResultTableList = LoadParamsInResultTable().ResultTableList;
         
         var ResultTable = new ResultTable();
@@ -32,7 +33,7 @@ public class ResultTableContainer{
 
         ResultTableList.Add(ResultTable);
 
-        using (var stream = new FileStream("ResultTable.xml", FileMode.Create))
+        using (var stream = new FileStream(SingletonGame.Instance.path, FileMode.Create))
         {
             serializer.Serialize(stream, this);
             changeCounter++;
@@ -42,7 +43,7 @@ public class ResultTableContainer{
     public ResultTableContainer LoadParamsInResultTable()
     {
         var serializer = new XmlSerializer(typeof(ResultTableContainer));
-        using (var stream = new FileStream("ResultTable.xml", FileMode.Open))
+        using (var stream = new FileStream(SingletonGame.Instance.path, FileMode.Open))
         {
             return serializer.Deserialize(stream) as ResultTableContainer;
         }

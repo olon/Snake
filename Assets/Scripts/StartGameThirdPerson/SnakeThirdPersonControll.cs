@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System;
+using System.Collections;
+using UnityEngine.UI;
 
 // Player script needs a component object CharacterController
 [RequireComponent(typeof(CharacterController))]
@@ -31,13 +33,18 @@ public class SnakeThirdPersonControll : MonoBehaviour, ISnakeController {
 
     float lastPosZ = 2.5f;
 
+    void Awake()
+    {
+        GameThirdPerson.gameStop = false;
+    }
+
     public void Start()
     {
         _controller = GetComponent<CharacterController>();
 
         anim = GetComponent<Animation>();
-    }
 
+    }
     public void Update()
     {
         currentRotation = Mathf.RoundToInt(transform.localEulerAngles.y);
@@ -100,7 +107,7 @@ public class SnakeThirdPersonControll : MonoBehaviour, ISnakeController {
         if ((ButtonInput == 1 || joystickInput == 1) && ((currentRotation == 0 && startPositionZ - 0.5f < transform.position.z) ||
                              (currentRotation == 180 && startPositionZ + 0.5f > transform.position.z)))
         {
-            transform.position = new Vector3(startPositionX, -1, startPositionZ);
+            transform.position = new Vector3(startPositionX, -0.5f, startPositionZ);
             SnakeRotation(0, 180, horizontalAxis);
             joystickInput = -1;
             ButtonInput = -1;
@@ -108,7 +115,7 @@ public class SnakeThirdPersonControll : MonoBehaviour, ISnakeController {
         else if ((ButtonInput == 1 || joystickInput == 1) && ((currentRotation == 90 && startPositionX - 0.5f < transform.position.x) ||
                                          (currentRotation == 270 && startPositionX + 0.5f > transform.position.x)))
         {
-            transform.position = new Vector3(startPositionX, -1, startPositionZ);
+            transform.position = new Vector3(startPositionX, -0.5f, startPositionZ);
             SnakeRotation(90, 270, horizontalAxis);
             joystickInput = -1;
             ButtonInput = -1;
@@ -126,19 +133,20 @@ public class SnakeThirdPersonControll : MonoBehaviour, ISnakeController {
 
     public void OnControllerColliderHit(ControllerColliderHit other)
     {
-        if (other.gameObject.tag == "Wall" || other.gameObject.GetComponent<Tail>())
-        {
-            SingletonGame.Instance.lifeSnake--;
-            SingletonGame.Instance.points = GameThirdPerson.Instance.points;
 
-            if (SingletonGame.Instance.lifeSnake == 0)
+            if (other.gameObject.tag == "Wall" || other.gameObject.GetComponent<Tail>())
             {
-                GameController.GoToMenu();
-                new ResultTableContainer().SaveParamsInResultTable(SingletonGame.Instance.name, Game.Instance.points);
+                SingletonGame.Instance.lifeSnake--;
+                SingletonGame.Instance.points = GameThirdPerson.Instance.points;
+                if (SingletonGame.Instance.lifeSnake <= 0)
+                {
+                    new ResultTableContainer().SaveParamsInResultTable(SingletonGame.Instance.name, SingletonGame.Instance.points);
+                    GameController.GoToMenu();
+                }
+                else
+                    GameController.LoadLevelSnakeThirdPerson();
             }
-            else
-                GameController.LoadLevelSnakeThirdPerson();
-        }
+
     }
 
     //Method add new body snake
@@ -149,7 +157,7 @@ public class SnakeThirdPersonControll : MonoBehaviour, ISnakeController {
             Current.transform.position - Current.transform.forward * 0.8f,
             transform.rotation) as GameObject;
         BodySnake.GetComponent<Tail>().target = Current.transform;
-        TailSnake.GetComponent<Tail>().target = BodySnake.transform;
+        TailSnake.GetComponent<Tail>().target = BodySnake.transform.FindChild("LookAtTail");
         Current = BodySnake;
     }
 }

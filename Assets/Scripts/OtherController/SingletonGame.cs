@@ -11,6 +11,9 @@ public class SingletonGame {
     public float distanceSnake = 0;
     public string name = "Player";
 
+    public string path = "ResultTable.xml";
+
+
     private SingletonGame() { }
 
     public static SingletonGame Instance

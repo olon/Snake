@@ -9,7 +9,7 @@ public class ButtonMenuHelper : MonoBehaviour {
 
     void Awake()
     {
-        OnChangeCameraClick();
+        HelpChangeCamera(0, 1, "Classic Camera", "Third Person");
         SingletonGame.Instance.points = 0;
         SingletonGame.Instance.lifeSnake = 3;
     }
@@ -22,23 +22,28 @@ public class ButtonMenuHelper : MonoBehaviour {
             GameController.LoadLevelSnake();
     }
 
-    public void OnChangeCameraClick()
+    private void HelpChangeCamera(int firstCamera, int secondCamera, string firstNameCamera, string secondNameCamera)
     {
-        switch(SingletonGame.Instance._cameraSwitch)
+        switch (SingletonGame.Instance._cameraSwitch)
         {
             case 0:
                 {
-                    _textCamera.text = "Camera:" + Environment.NewLine + "Third Person";
-                    SingletonGame.Instance._cameraSwitch = 1;
+                    _textCamera.text = "Camera:" + Environment.NewLine + firstNameCamera; 
+                    SingletonGame.Instance._cameraSwitch = firstCamera; 
                 }
-            break;
+                break;
             case 1:
                 {
-                    _textCamera.text = "Camera:" + Environment.NewLine + "Classic Camera";
-                    SingletonGame.Instance._cameraSwitch = 0;
+                    _textCamera.text = "Camera:" + Environment.NewLine + secondNameCamera; 
+                    SingletonGame.Instance._cameraSwitch = secondCamera; 
                 }
-            break;
+                break;
         }
+    }
+
+    public void OnChangeCameraClick()
+    {
+        HelpChangeCamera(1, 0, "Third Person", "Classic Camera");
     }
 
     public void OnScoreScreenClick()

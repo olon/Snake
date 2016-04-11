@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Xml.Linq;
 using System.Linq;
 using System.Collections;
+using System.IO;
 
 public class PlayerScoreList : MonoBehaviour {
 
@@ -14,6 +14,11 @@ public class PlayerScoreList : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+
+        if (!System.IO.File.Exists(SingletonGame.Instance.path))
+        {
+            return;
+        }
         Result = new ResultTableContainer().LoadParamsInResultTable();
     }
 	
@@ -43,6 +48,7 @@ public class PlayerScoreList : MonoBehaviour {
         {
             GameObject go = (GameObject)Instantiate(playerScoreEntryPrefab);
             go.transform.SetParent(this.transform);
+            go.transform.localScale = new Vector3(1, 1, 1);
             go.transform.Find("TextNumber").GetComponent<Text>().text = "" + ++indexScores + "-->";
             go.transform.Find("TextUserName").GetComponent<Text>().text = resultList.name;
             go.transform.Find("TextScores").GetComponent<Text>().text = resultList.score.ToString();
